@@ -43,7 +43,7 @@ int cmp_func_lexographic_sort_reverse(const char* a, const char* b){
 
 /*
     cmp_func_number_of_distinct_characters
-    Checks two strings for the number of distinct characters.
+    Checks two strings for the number of distinct alphabetical characters.
     Returns:
         1  for a has less distinct characters than b
         -1  for a has more distinct characters than b
@@ -54,20 +54,44 @@ int cmp_func_number_of_distinct_characters(const char* a, const char* b){
     int i,j;
     int distCntA = 0;
     int distCntB = 0;
-    unsigned int charFound = 0; // maps characters found
+    unsigned int charFoundLowerCase = 0; // maps lower case characters found
+    unsigned int charFoundUpperCase = 0; // maps upper case characters found
     //ASCII a is dec 97 (hex 0x61) and z is dec 122 (hex 0x7a)
+    //ASCII A is dec 65 (hex 0x41) and Z is dec 90 (hex 0x5a)
 
     for(i = 0; i < strlen(a); i++){
-        if( (charFound & (0x1 << ((unsigned int)a[i] - 97))) == 0x0){
-            charFound |= (0x1 << ((unsigned int)a[i] - 97));
-            distCntA++;
+        if( ((unsigned int)a[i] >= 65) && ((unsigned int)a[i] <= 90) ){
+            if( (charFoundUpperCase & (0x1 << ((unsigned int)a[i] - 65))) == 0x0){
+                charFoundUpperCase |= (0x1 << ((unsigned int)a[i] - 65));
+                distCntA++;
+            }
+        }
+
+        if( ((unsigned int)a[i] >= 97) && ((unsigned int)a[i] <= 122) ){
+            if( (charFoundLowerCase & (0x1 << ((unsigned int)a[i] - 97))) == 0x0){
+                charFoundLowerCase |= (0x1 << ((unsigned int)a[i] - 97));
+                distCntA++;
+            }
         }
     }
-    charFound = 0; //reset character found map
+
+    //reset character found map
+    charFoundLowerCase = 0; 
+    charFoundUpperCase = 0; 
+    
     for(i = 0; i < strlen(b); i++){
-        if( (charFound & (0x1 << ((int)b[i] - 97))) == 0x0){
-            charFound |= (0x1 << ((int)b[i] - 97));
-            distCntB++;
+        if( ((unsigned int)b[i] >= 65) && ((unsigned int)b[i] <= 90) ){
+            if( (charFoundUpperCase & (0x1 << ((unsigned int)b[i] - 65))) == 0x0){
+                charFoundUpperCase |= (0x1 << ((unsigned int)b[i] - 65));
+                distCntB++;
+            }
+        }
+
+        if( ((unsigned int)b[i] >= 97) && ((unsigned int)b[i] <= 122) ){
+            if( (charFoundLowerCase & (0x1 << ((int)b[i] - 97))) == 0x0){
+                charFoundLowerCase |= (0x1 << ((int)b[i] - 97));
+                distCntB++;
+            }
         }
     }
 
